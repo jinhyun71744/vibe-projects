@@ -7,7 +7,7 @@ todos:
     status: completed
   - id: phase-1-a
     content: "1단계 섹션 A: 루트·Auth·Main 레이아웃 + 랜딩 페이지"
-    status: pending
+    status: completed
   - id: phase-1-b
     content: "1단계 섹션 B: 로그인·회원가입 목업 화면"
     status: pending
