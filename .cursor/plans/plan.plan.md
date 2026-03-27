@@ -10,7 +10,7 @@ todos:
     status: completed
   - id: phase-1-b
     content: "1단계 섹션 B: 로그인·회원가입 목업 화면"
-    status: pending
+    status: completed
   - id: phase-1-c
     content: "1단계 섹션 C: 일기 목록 + 기분 필터(mockData)"
     status: pending
