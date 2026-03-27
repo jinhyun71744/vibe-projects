@@ -4,7 +4,7 @@ overview: spec.md·api-spec.md 기반으로 0단계(초기 셋업) → 1단계(M
 todos:
   - id: phase-0
     content: "0단계: frontend/에 Next.js 프로젝트 생성, 폴더 스캐폴딩, 타입·Mock 파일, 개발 서버 확인"
-    status: pending
+    status: completed
   - id: phase-1-a
     content: "1단계 섹션 A: 루트·Auth·Main 레이아웃 + 랜딩 페이지"
     status: pending
