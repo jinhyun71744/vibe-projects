@@ -13,19 +13,19 @@ todos:
     status: completed
   - id: phase-1-c
     content: "1단계 섹션 C: 일기 목록 + 기분 필터(mockData)"
-    status: pending
+    status: completed
   - id: phase-1-d
     content: "1단계 섹션 D: 일기 작성 폼 + 유효성 검사"
-    status: pending
+    status: completed
   - id: phase-1-e
     content: "1단계 섹션 E: 일기 상세 보기 + 404"
-    status: pending
+    status: completed
   - id: phase-1-f
     content: "1단계 섹션 F: 일기 수정 + 유효성 검사"
-    status: pending
+    status: completed
   - id: phase-1-g
     content: "1단계 섹션 G: 전체 플로우 점검"
-    status: pending
+    status: completed
   - id: phase-2-a
     content: "2단계 섹션 A: Supabase DB 셋업(MCP, vibe-tutorial, diaries 테이블·트리거)"
     status: pending
