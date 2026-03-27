@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import { mockDiaries } from "@/lib/mockData";
 import type { Mood } from "@/types/diary";
@@ -15,14 +16,15 @@ const MOOD_DISPLAY: Record<Mood, { label: string; emoji: string }> = {
 };
 
 type DiaryDetailPageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export default function DiaryDetailPage({ params }: DiaryDetailPageProps) {
+  const { id } = use(params);
   const router = useRouter();
-  const diary = mockDiaries.find((item) => item.id === params.id);
+  const diary = mockDiaries.find((item) => item.id === id);
 
   const handleDelete = () => {
     const shouldDelete = window.confirm("정말 이 일기를 삭제하시겠어요?");
