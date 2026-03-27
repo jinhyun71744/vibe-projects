@@ -1,0 +1,18 @@
+---
+description: Tailwind CSS — 유틸리티·전역 스타일
+globs: "**/*.{tsx,css}"
+alwaysApply: false
+---
+
+# 스타일 (Tailwind CSS)
+
+## DO
+
+- 스타일링은 **Tailwind 유틸리티 클래스**를 우선한다.
+- 전역·테마·리셋은 프로젝트 진입 CSS(예: `globals.css`)와 **기존 Tailwind 설정**에 맞춘다.
+- 반복되는 UI는 **컴포넌트**로 묶고, 클래스 문자열도 프로젝트에서 쓰는 방식(`cn`, `clsx` 등)이 있으면 따른다.
+
+## DON'T
+
+- Tailwind로 충분한데 **`style={{ }}` 인라인**으로 동일 스타일을 중복 정의하지 않는다.
+- **별도 CSS 파일**로 Tailwind와 역할이 겹치는 규칙을 남발하지 않는다. (디자인 토큰·필수 예외는 프로젝트 컨벤션에 따름.)

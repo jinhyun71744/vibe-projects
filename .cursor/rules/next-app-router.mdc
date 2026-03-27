@@ -1,0 +1,19 @@
+---
+description: Next.js App Router — app/ 라우팅·레이아웃·API
+globs: "app/**/*"
+alwaysApply: false
+---
+
+# Next.js App Router
+
+## DO
+
+- 새 **페이지·레이아웃·Route Handler·메타데이터**는 `app/` 아래에 둔다.
+- 관례 파일을 활용한다: `layout.tsx`, `page.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx` 등.
+- **서버 컴포넌트가 기본**이다. 상태·이벤트·브라우저 API가 필요할 때만 해당 파일에 `"use client"`를 상단에 명시한다.
+- API·서버 로직은 **Route Handler**(`route.ts`) 또는 **Server Actions**를 프로젝트 컨벤션에 맞게 사용한다.
+
+## DON'T
+
+- 신규 라우트를 **`pages/`** 에 추가하지 않는다. (레거시 `pages/` 가 있으면 유지만 하고 확장은 `app/` 으로.)
+- 이유 없이 파일 전체를 `"use client"` 로 만들지 않는다.
