@@ -28,10 +28,10 @@ todos:
     status: completed
   - id: phase-2-a
     content: "2단계 섹션 A: Supabase DB 셋업(MCP, vibe-tutorial, diaries 테이블·트리거)"
-    status: pending
+    status: completed
   - id: phase-2-b
     content: "2단계 섹션 B: Supabase 클라이언트 설정(브라우저·서버 유틸, 환경 변수)"
-    status: pending
+    status: completed
   - id: phase-2-c
     content: "2단계 섹션 C: 인증 구현(회원가입·로그인·로그아웃·미들웨어)"
     status: pending
