@@ -1,49 +1,60 @@
-"use client";
-
 import Link from "next/link";
-import { useMemo, useState } from "react";
 
-import { mockDiaries } from "@/lib/mockData";
+import { MOOD_DISPLAY, MOOD_FILTER_OPTIONS, type MoodFilter } from "@/lib/diary/ui";
+import { createServerClient } from "@/lib/supabase/server";
 import type { Mood } from "@/types/diary";
+import { isMood } from "@/types/diary";
 
-type MoodFilter = Mood | "all";
+export const dynamic = "force-dynamic";
 
-const MOOD_OPTIONS: { value: MoodFilter; label: string; emoji: string }[] = [
-  { value: "all", label: "전체", emoji: "🗂️" },
-  { value: "happy", label: "기쁨", emoji: "😊" },
-  { value: "sad", label: "슬픔", emoji: "😢" },
-  { value: "angry", label: "분노", emoji: "😠" },
-  { value: "anxious", label: "불안", emoji: "😰" },
-  { value: "neutral", label: "보통", emoji: "😐" },
-];
-
-const MOOD_DISPLAY: Record<Mood, { label: string; emoji: string }> = {
-  happy: { label: "기쁨", emoji: "😊" },
-  sad: { label: "슬픔", emoji: "😢" },
-  angry: { label: "분노", emoji: "😠" },
-  anxious: { label: "불안", emoji: "😰" },
-  neutral: { label: "보통", emoji: "😐" },
+type DiariesPageProps = {
+  searchParams: Promise<{ mood?: string }>;
 };
 
-export default function DiariesPage() {
-  const [selectedMood, setSelectedMood] = useState<MoodFilter>("all");
+function filterHref(value: MoodFilter): string {
+  if (value === "all") {
+    return "/diaries";
+  }
+  return `/diaries?mood=${value}`;
+}
 
-  const sortedDiaries = useMemo(
-    () =>
-      [...mockDiaries].sort(
-        (a, b) =>
-          new Date(b.diary_date).getTime() - new Date(a.diary_date).getTime(),
-      ),
-    [],
-  );
+function isActiveFilter(param: string | undefined, option: MoodFilter): boolean {
+  if (option === "all") {
+    return !param || !isMood(param);
+  }
+  return param === option;
+}
 
-  const visibleDiaries = useMemo(() => {
-    if (selectedMood === "all") {
-      return sortedDiaries;
-    }
+export default async function DiariesPage({ searchParams }: DiariesPageProps) {
+  const { mood: moodParam } = await searchParams;
+  const moodFilter: Mood | null = moodParam && isMood(moodParam) ? moodParam : null;
 
-    return sortedDiaries.filter((diary) => diary.mood === selectedMood);
-  }, [selectedMood, sortedDiaries]);
+  const supabase = await createServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return null;
+  }
+
+  let query = supabase
+    .from("diaries")
+    .select("id, title, diary_date, mood")
+    .eq("user_id", user.id)
+    .order("diary_date", { ascending: false });
+
+  if (moodFilter) {
+    query = query.eq("mood", moodFilter);
+  }
+
+  const { data: diaries, error } = await query;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const rows = diaries ?? [];
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 py-10">
@@ -60,14 +71,14 @@ export default function DiariesPage() {
       </div>
 
       <div className="flex flex-wrap gap-3">
-        {MOOD_OPTIONS.map((option) => {
-          const isActive = selectedMood === option.value;
+        {MOOD_FILTER_OPTIONS.map((option) => {
+          const isActive = isActiveFilter(moodParam, option.value);
 
           return (
-            <button
+            <Link
               key={option.value}
-              type="button"
-              onClick={() => setSelectedMood(option.value)}
+              href={filterHref(option.value)}
+              scroll={false}
               className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                 isActive
                   ? "border-black bg-black text-white shadow-sm dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900"
@@ -75,25 +86,25 @@ export default function DiariesPage() {
               }`}
             >
               {option.emoji} {option.label}
-            </button>
+            </Link>
           );
         })}
       </div>
 
       <div
         className={`overflow-hidden rounded-[2rem] border bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${
-          visibleDiaries.length === 0
+          rows.length === 0
             ? "border-dashed border-gray-200 dark:border-zinc-700"
             : "border-gray-100"
         }`}
       >
-        {visibleDiaries.length === 0 ? (
+        {rows.length === 0 ? (
           <p className="px-6 py-14 text-center text-sm font-medium text-slate-500 dark:text-zinc-400">
-            선택한 기분의 일기가 없습니다.
+            {moodFilter ? "선택한 기분의 일기가 없습니다." : "아직 작성한 일기가 없습니다."}
           </p>
         ) : (
           <div className="divide-y divide-gray-100 dark:divide-zinc-800">
-            {visibleDiaries.map((diary) => (
+            {rows.map((diary) => (
               <Link
                 key={diary.id}
                 href={`/diaries/${diary.id}`}
@@ -109,7 +120,8 @@ export default function DiariesPage() {
                     </p>
                   </div>
                   <span className="shrink-0 rounded-md bg-emerald-100 px-2.5 py-1 text-xs font-bold tracking-wide text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
-                    {MOOD_DISPLAY[diary.mood].emoji} {MOOD_DISPLAY[diary.mood].label}
+                    {MOOD_DISPLAY[diary.mood as Mood].emoji}{" "}
+                    {MOOD_DISPLAY[diary.mood as Mood].label}
                   </span>
                 </div>
               </Link>

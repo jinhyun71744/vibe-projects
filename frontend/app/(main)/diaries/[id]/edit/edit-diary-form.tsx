@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useMemo, useState, useTransition } from "react";
+import { FormEvent, useState, useTransition } from "react";
 
-import { createDiary } from "../actions";
+import { updateDiary } from "../../actions";
 import { MOOD_FORM_OPTIONS } from "@/lib/diary/ui";
-import type { Mood } from "@/types/diary";
+import type { Diary, Mood } from "@/types/diary";
 
 type FormErrors = {
   title?: string;
@@ -14,15 +14,18 @@ type FormErrors = {
   mood?: string;
 };
 
-export default function NewDiaryPage() {
+type EditDiaryFormProps = {
+  diary: Diary;
+};
+
+export function EditDiaryForm({ diary }: EditDiaryFormProps) {
   const router = useRouter();
-  const today = useMemo(() => new Date().toISOString().split("T")[0], []);
   const [isPending, startTransition] = useTransition();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [diaryDate, setDiaryDate] = useState(today);
-  const [mood, setMood] = useState<Mood | "">("");
+  const [title, setTitle] = useState(diary.title);
+  const [content, setContent] = useState(diary.content);
+  const [diaryDate, setDiaryDate] = useState(diary.diary_date);
+  const [mood, setMood] = useState<Mood | "">(diary.mood);
   const [errors, setErrors] = useState<FormErrors>({});
   const [actionError, setActionError] = useState<string | null>(null);
 
@@ -52,18 +55,19 @@ export default function NewDiaryPage() {
     }
 
     const formData = new FormData();
+    formData.set("id", diary.id);
     formData.set("title", title);
     formData.set("content", content);
     formData.set("diary_date", diaryDate);
     formData.set("mood", mood);
 
     startTransition(async () => {
-      const result = await createDiary(formData);
+      const result = await updateDiary(formData);
       if (!result.ok) {
         setActionError(result.error);
         return;
       }
-      router.push(`/diaries/${result.id}`);
+      router.push(`/diaries/${diary.id}`);
       router.refresh();
     });
   };
@@ -73,10 +77,10 @@ export default function NewDiaryPage() {
       <div className="space-y-8 rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-zinc-100">
-            새 일기 쓰기
+            일기 수정
           </h1>
           <p className="text-sm font-medium text-slate-500 dark:text-zinc-400">
-            오늘의 감정과 하루를 기록해 보세요.
+            기존 내용을 수정하고 저장해 보세요.
           </p>
         </div>
 
@@ -189,7 +193,7 @@ export default function NewDiaryPage() {
               {isPending ? "저장 중…" : "저장"}
             </button>
             <Link
-              href="/diaries"
+              href={`/diaries/${diary.id}`}
               className="inline-flex items-center rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-gray-300 hover:bg-slate-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
             >
               취소

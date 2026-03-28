@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { LogoutButton } from "./logout-button";
+
 export default function MainLayout({
   children,
 }: Readonly<{
@@ -15,12 +17,7 @@ export default function MainLayout({
           >
             나만의 일기장
           </Link>
-          <Link
-            href="/login"
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-gray-300 hover:bg-slate-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
-          >
-            로그아웃
-          </Link>
+          <LogoutButton />
         </div>
       </header>
       <main className="flex-1">{children}</main>

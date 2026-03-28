@@ -34,13 +34,13 @@ todos:
     status: completed
   - id: phase-2-c
     content: "2단계 섹션 C: 인증 구현(회원가입·로그인·로그아웃·미들웨어)"
-    status: pending
+    status: completed
   - id: phase-2-d
     content: "2단계 섹션 D: 일기 CRUD를 Supabase로 전환, mockData 삭제"
-    status: pending
+    status: completed
   - id: phase-2-e
     content: "2단계 섹션 E: 에러·로딩 UI + 전체 플로우 검증"
-    status: pending
+    status: completed
 isProject: false
 ---
 
