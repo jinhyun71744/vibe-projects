@@ -37,17 +37,17 @@ export default function DiaryDetailPage({ params }: DiaryDetailPageProps) {
 
   if (!diary) {
     return (
-      <div className="mx-auto w-full max-w-3xl px-4 py-8">
-        <div className="space-y-4 rounded-2xl border border-dashed border-zinc-300 bg-white p-6 text-center dark:border-zinc-700 dark:bg-zinc-900">
-          <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+      <div className="mx-auto w-full max-w-3xl px-6 py-10">
+        <div className="space-y-5 rounded-[2rem] border border-dashed border-gray-200 bg-white p-10 text-center shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-zinc-100">
             일기를 찾을 수 없습니다
           </h1>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="text-sm font-medium text-slate-500 dark:text-zinc-400">
             요청한 일기가 존재하지 않거나 삭제되었습니다.
           </p>
           <Link
             href="/diaries"
-            className="inline-flex rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="inline-flex rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-gray-300 hover:bg-slate-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
           >
             목록으로 돌아가기
           </Link>
@@ -57,43 +57,43 @@ export default function DiaryDetailPage({ params }: DiaryDetailPageProps) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-8">
-      <article className="space-y-6 rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-        <header className="space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-700 dark:text-zinc-300">
+    <div className="mx-auto w-full max-w-3xl px-6 py-10">
+      <article className="space-y-8 rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <header className="space-y-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-md bg-emerald-100 px-2.5 py-1 text-xs font-bold tracking-wide text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
               {MOOD_DISPLAY[diary.mood].emoji} {MOOD_DISPLAY[diary.mood].label}
             </span>
-            <time className="text-sm text-zinc-600 dark:text-zinc-400">
+            <time className="text-sm font-medium text-slate-400 dark:text-zinc-500">
               {new Date(diary.diary_date).toLocaleDateString("ko-KR")}
             </time>
           </div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-zinc-100">
             {diary.title}
           </h1>
         </header>
 
-        <p className="whitespace-pre-wrap leading-7 text-zinc-800 dark:text-zinc-200">
+        <p className="whitespace-pre-wrap leading-relaxed text-slate-700 dark:text-zinc-200">
           {diary.content}
         </p>
 
-        <div className="flex flex-wrap gap-2 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+        <div className="flex flex-wrap gap-3 border-t border-gray-100 pt-6 dark:border-zinc-800">
           <Link
             href={`/diaries/${diary.id}/edit`}
-            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+            className="rounded-full bg-black px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
           >
             수정
           </Link>
           <button
             type="button"
             onClick={handleDelete}
-            className="rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-50 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-950/40"
+            className="rounded-xl border border-orange-200 bg-white px-5 py-2.5 text-sm font-semibold text-orange-800 shadow-sm transition hover:bg-orange-50 dark:border-orange-900/60 dark:bg-zinc-900 dark:text-orange-300 dark:hover:bg-orange-950/30"
           >
             삭제
           </button>
           <Link
             href="/diaries"
-            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="inline-flex items-center rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-gray-300 hover:bg-slate-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
           >
             목록으로 돌아가기
           </Link>

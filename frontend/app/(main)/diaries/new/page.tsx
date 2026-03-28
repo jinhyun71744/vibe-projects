@@ -65,22 +65,22 @@ export default function NewDiaryPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-8">
-      <div className="space-y-6 rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+    <div className="mx-auto w-full max-w-3xl px-6 py-10">
+      <div className="space-y-8 rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-zinc-100">
             새 일기 쓰기
           </h1>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="text-sm font-medium text-slate-500 dark:text-zinc-400">
             오늘의 감정과 하루를 기록해 보세요.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-          <div className="space-y-1.5">
+        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+          <div className="space-y-2">
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              className="block text-sm font-semibold text-slate-500 dark:text-zinc-400"
             >
               제목
             </label>
@@ -90,21 +90,21 @@ export default function NewDiaryPage() {
               value={title}
               onChange={(event) => setTitle(event.target.value)}
               placeholder="제목을 입력하세요"
-              className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition dark:bg-zinc-800 dark:text-zinc-100 ${
+              className={`w-full rounded-xl border bg-white px-4 py-2.5 text-sm outline-none transition focus:ring-2 dark:bg-zinc-800 dark:text-zinc-100 ${
                 errors.title
-                  ? "border-red-500 focus:border-red-500 dark:border-red-500"
-                  : "border-zinc-300 focus:border-zinc-500 dark:border-zinc-700"
+                  ? "border-red-400 focus:border-red-500 focus:ring-red-100 dark:border-red-500 dark:focus:ring-red-950/40"
+                  : "border-gray-200 focus:border-slate-400 focus:ring-slate-100 dark:border-zinc-700 dark:focus:ring-zinc-800"
               }`}
             />
             {errors.title ? (
-              <p className="text-xs text-red-600 dark:text-red-400">{errors.title}</p>
+              <p className="text-xs font-medium text-red-600 dark:text-red-400">{errors.title}</p>
             ) : null}
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <label
               htmlFor="content"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              className="block text-sm font-semibold text-slate-500 dark:text-zinc-400"
             >
               본문
             </label>
@@ -114,21 +114,21 @@ export default function NewDiaryPage() {
               value={content}
               onChange={(event) => setContent(event.target.value)}
               placeholder="오늘 있었던 일을 적어보세요"
-              className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition dark:bg-zinc-800 dark:text-zinc-100 ${
+              className={`w-full rounded-xl border bg-white px-4 py-2.5 text-sm outline-none transition focus:ring-2 dark:bg-zinc-800 dark:text-zinc-100 ${
                 errors.content
-                  ? "border-red-500 focus:border-red-500 dark:border-red-500"
-                  : "border-zinc-300 focus:border-zinc-500 dark:border-zinc-700"
+                  ? "border-red-400 focus:border-red-500 focus:ring-red-100 dark:border-red-500 dark:focus:ring-red-950/40"
+                  : "border-gray-200 focus:border-slate-400 focus:ring-slate-100 dark:border-zinc-700 dark:focus:ring-zinc-800"
               }`}
             />
             {errors.content ? (
-              <p className="text-xs text-red-600 dark:text-red-400">{errors.content}</p>
+              <p className="text-xs font-medium text-red-600 dark:text-red-400">{errors.content}</p>
             ) : null}
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <label
               htmlFor="diaryDate"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              className="block text-sm font-semibold text-slate-500 dark:text-zinc-400"
             >
               날짜
             </label>
@@ -137,13 +137,13 @@ export default function NewDiaryPage() {
               type="date"
               value={diaryDate}
               onChange={(event) => setDiaryDate(event.target.value)}
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:ring-zinc-800"
             />
           </div>
 
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">기분</p>
-            <div className="flex flex-wrap gap-2">
+          <div className="space-y-3">
+            <p className="text-sm font-semibold text-slate-500 dark:text-zinc-400">기분</p>
+            <div className="flex flex-wrap gap-3">
               {MOOD_OPTIONS.map((option) => {
                 const isSelected = mood === option.value;
                 return (
@@ -151,10 +151,10 @@ export default function NewDiaryPage() {
                     key={option.value}
                     type="button"
                     onClick={() => setMood(option.value)}
-                    className={`rounded-full border px-3 py-1.5 text-sm font-medium transition ${
+                    className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                       isSelected
-                        ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900"
-                        : "border-zinc-300 text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                        ? "border-black bg-black text-white shadow-sm dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900"
+                        : "border-gray-200 bg-white text-slate-600 shadow-sm hover:border-gray-300 hover:bg-slate-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
                     }`}
                   >
                     {option.emoji} {option.label}
@@ -163,20 +163,20 @@ export default function NewDiaryPage() {
               })}
             </div>
             {errors.mood ? (
-              <p className="text-xs text-red-600 dark:text-red-400">{errors.mood}</p>
+              <p className="text-xs font-medium text-red-600 dark:text-red-400">{errors.mood}</p>
             ) : null}
           </div>
 
-          <div className="flex flex-wrap gap-2 pt-2">
+          <div className="flex flex-wrap gap-3 border-t border-gray-100 pt-6 dark:border-zinc-800">
             <button
               type="submit"
-              className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+              className="rounded-full bg-black px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
             >
               저장
             </button>
             <Link
               href="/diaries"
-              className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              className="inline-flex items-center rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-gray-300 hover:bg-slate-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
             >
               취소
             </Link>
