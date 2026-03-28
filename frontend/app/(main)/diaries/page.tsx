@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { diaryTitleContentSearchOrFilter } from "@/lib/diary/search";
 import { MOOD_DISPLAY, MOOD_FILTER_OPTIONS, type MoodFilter } from "@/lib/diary/ui";
 import { createServerClient } from "@/lib/supabase/server";
 import type { Mood } from "@/types/diary";
@@ -8,14 +9,19 @@ import { isMood } from "@/types/diary";
 export const dynamic = "force-dynamic";
 
 type DiariesPageProps = {
-  searchParams: Promise<{ mood?: string }>;
+  searchParams: Promise<{ mood?: string; q?: string }>;
 };
 
-function filterHref(value: MoodFilter): string {
-  if (value === "all") {
-    return "/diaries";
+function filterHref(value: MoodFilter, qTrimmed: string): string {
+  const params = new URLSearchParams();
+  if (value !== "all") {
+    params.set("mood", value);
   }
-  return `/diaries?mood=${value}`;
+  if (qTrimmed) {
+    params.set("q", qTrimmed);
+  }
+  const qs = params.toString();
+  return qs ? `/diaries?${qs}` : "/diaries";
 }
 
 function isActiveFilter(param: string | undefined, option: MoodFilter): boolean {
@@ -26,8 +32,9 @@ function isActiveFilter(param: string | undefined, option: MoodFilter): boolean 
 }
 
 export default async function DiariesPage({ searchParams }: DiariesPageProps) {
-  const { mood: moodParam } = await searchParams;
+  const { mood: moodParam, q: qParam } = await searchParams;
   const moodFilter: Mood | null = moodParam && isMood(moodParam) ? moodParam : null;
+  const qTrimmed = typeof qParam === "string" ? qParam.trim() : "";
 
   const supabase = await createServerClient();
   const {
@@ -46,6 +53,10 @@ export default async function DiariesPage({ searchParams }: DiariesPageProps) {
 
   if (moodFilter) {
     query = query.eq("mood", moodFilter);
+  }
+
+  if (qTrimmed) {
+    query = query.or(diaryTitleContentSearchOrFilter(qTrimmed));
   }
 
   const { data: diaries, error } = await query;
@@ -70,14 +81,37 @@ export default async function DiariesPage({ searchParams }: DiariesPageProps) {
         </Link>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-4">
+        <form
+          action="/diaries"
+          method="get"
+          className="flex w-full max-w-xl flex-col gap-2 sm:flex-row sm:items-center"
+        >
+          {moodFilter ? <input type="hidden" name="mood" value={moodFilter} /> : null}
+          <input
+            type="search"
+            name="q"
+            defaultValue={typeof qParam === "string" ? qParam : ""}
+            placeholder="제목·내용 검색"
+            aria-label="일기 검색"
+            className="min-w-0 flex-1 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm outline-none ring-black/5 placeholder:text-slate-400 focus:border-gray-300 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-600 dark:focus:ring-zinc-600/30"
+          />
+          <button
+            type="submit"
+            className="shrink-0 rounded-full border border-gray-200 bg-slate-50 px-5 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-100 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+          >
+            검색
+          </button>
+        </form>
+
+        <div className="flex flex-wrap gap-3">
         {MOOD_FILTER_OPTIONS.map((option) => {
           const isActive = isActiveFilter(moodParam, option.value);
 
           return (
             <Link
               key={option.value}
-              href={filterHref(option.value)}
+              href={filterHref(option.value, qTrimmed)}
               scroll={false}
               className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                 isActive
@@ -89,6 +123,7 @@ export default async function DiariesPage({ searchParams }: DiariesPageProps) {
             </Link>
           );
         })}
+        </div>
       </div>
 
       <div
@@ -100,7 +135,13 @@ export default async function DiariesPage({ searchParams }: DiariesPageProps) {
       >
         {rows.length === 0 ? (
           <p className="px-6 py-14 text-center text-sm font-medium text-slate-500 dark:text-zinc-400">
-            {moodFilter ? "선택한 기분의 일기가 없습니다." : "아직 작성한 일기가 없습니다."}
+            {qTrimmed && moodFilter
+              ? "검색어와 기분 조건에 맞는 일기가 없습니다."
+              : qTrimmed
+                ? "검색 결과가 없습니다."
+                : moodFilter
+                  ? "선택한 기분의 일기가 없습니다."
+                  : "아직 작성한 일기가 없습니다."}
           </p>
         ) : (
           <div className="divide-y divide-gray-100 dark:divide-zinc-800">
