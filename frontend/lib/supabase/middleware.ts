@@ -6,7 +6,7 @@ import { getSupabasePublicEnv } from "@/lib/supabase/env";
 
 /**
  * 세션 쿠키를 갱신하고 검증된 사용자 정보를 함께 반환합니다.
- * 미들웨어에서 한 번만 호출하세요.
+ * 루트 `proxy.ts`에서 한 번만 호출하세요.
  */
 export async function updateSession(request: NextRequest): Promise<{
   response: NextResponse;
